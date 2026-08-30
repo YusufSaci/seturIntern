@@ -1,28 +1,48 @@
+package com.example.demo.service;
 
+import com.example.demo.dao.CustomerDao;
+import com.example.demo.dto.CustomerDto;
+import com.example.demo.entity.Customer;
+import com.example.demo.mapper.CustomerMapper;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
 
-    private CustomerDao customerDao;
+    private  CustomerDao customerDao;
+    private  CustomerMapper customerMapper;
 
-    public CustomerServiceImpl(CustomerDao customerDao){
+    @Autowired
+    public CustomerServiceImpl(CustomerDao customerDao, CustomerMapper customerMapper) {
         this.customerDao = customerDao;
+        this.customerMapper = customerMapper;
     }
 
     @Override
     @Transactional
-    public void save(Customer customer){
+    public void save(CustomerDto customerDto){
+        Customer customer = customerMapper.toEntity(customerDto);
         customerDao.save(customer);
     }
 
     @Override
-    public Customer findById(long id){
-        return customerDao.findById(id);
+    public CustomerDto findById(long id){
+        Customer customer = customerDao.findById(id);
+        if (customer == null) {
+            throw new RuntimeException("customer not found");
+        }
+
+        return customerMapper.toDto(customer);
     }
 
     @Override
-    public List<Customer> findAll(){
-        return customerDao.findAll();
+    public List<CustomerDto> findAll(){
+        return customerDao.findAll().stream().map(customer -> customerMapper.toDto(customer)).toList();
     }
 
     @Override
@@ -33,7 +53,8 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     @Transactional
-    public Customer update(Customer customer){
-        return customerDao.update(customer);
+    public CustomerDto update(CustomerDto customerDto){
+        Customer customer = customerMapper.toEntity(customerDto);
+        return customerMapper.toDto(customerDao.update(customer));
     }
 }

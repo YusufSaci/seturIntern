@@ -1,3 +1,6 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
@@ -6,7 +9,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "product_name")
     private String productName;
@@ -29,11 +32,11 @@ public class Product {
 
     // getter ve setter
      
-    public long getId(){
+    public Long getId(){
         return id;
     }
 
-    public void setId(long id){
+    public void setId(Long id){
         this.id = id;
     }
 
@@ -55,7 +58,7 @@ public class Product {
     }
 
     public Category getCategory(){
-        return category
+        return category;
     }
 
     public void setCategory(Category category){

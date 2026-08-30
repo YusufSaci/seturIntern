@@ -1,12 +1,18 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.OrderDto;
+import com.example.demo.entity.Order;
+
+import java.util.List;
+
 public interface OrderService{
 
-    void save(Order order);
+    OrderDto save(Long customerId,OrderDto order);
 
-    Order findById(long id);
+    OrderDto findById(long id);
 
-    List<Order> findAll();
+    List<OrderDto> findAll();
 
     void deleteById(long id);
 
-   
 }

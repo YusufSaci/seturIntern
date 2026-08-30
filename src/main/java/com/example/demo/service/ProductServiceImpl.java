@@ -1,18 +1,28 @@
+package com.example.demo.service;
 
+import com.example.demo.dao.ProductRepository;
+import com.example.demo.entity.Product;
+import com.example.demo.service.ProductService;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     private  ProductRepository  productRepository;
 
     @Autowired
-    public  ProductServiceImpl( ProductRepository  productRepository){
+    public  ProductServiceImpl( ProductRepository productRepository){
         this.productRepository = productRepository;
     }
 
     @Override
     @Transactional
-    public Product save(Product  product){
+    public Product save(Product product){
         return productRepository.save(product);
     }
 
@@ -24,7 +34,7 @@ public class ProductServiceImpl implements ProductService{
             return product.get();
          }
 
-         throw new RunTimeException("product not found.")
+         throw new RuntimeException("product not found.");
     }
 
     @Override

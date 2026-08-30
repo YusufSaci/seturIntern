@@ -1,42 +1,80 @@
+package com.example.demo.service;
+
+import com.example.demo.dao.CustomerDao;
+import com.example.demo.dao.OrderRepository;
+import com.example.demo.dao.ProductRepository;
+import com.example.demo.dto.OrderDto;
+import com.example.demo.entity.Customer;
+import com.example.demo.entity.Order;
+import com.example.demo.entity.Product;
+import com.example.demo.mapper.OrderMapper;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
+
+import java.util.List;
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final CustomerDao customerDao;
+    private final ProductRepository productRepository;
+    private final OrderMapper orderMapper;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository){
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerDao customerDao,
+                            ProductRepository productRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
+        this.customerDao = customerDao;
+        this.productRepository = productRepository;
+        this.orderMapper = orderMapper;
     }
 
     @Override
     @Transactional
-    public Order save( Order order){
-        return  orderRepository.save(order);
+    public OrderDto save(Long customerId,OrderDto orderDto) {
+        Customer customer = customerDao.findById(customerId);
+        if (customer == null) {
+            throw new RuntimeException("customer not found");
+        }
+
+        Product product = productRepository.findById(orderDto.productId())
+                .orElseThrow(() -> new RuntimeException("product not found"));
+
+        Order order = orderMapper.toEntity(orderDto, customer, product);
+
+        order = orderRepository.save(order);
+
+        return orderMapper.toDto(order);
+    }
+    @Override
+    public OrderDto findById(long id){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("order not found") );
+
+        return orderMapper.toDto(order);
     }
 
     @Override
-    public  Order findById(long id){
-         Optional<Order> order =  orderRepository.findById(id);
+    public List<OrderDto> findAll(){
 
-         if(order.isPresent()){
-            return order.get();
-         }
-
-         throw new RunTimeException("order not found.")
-    }
-
-    @Override
-    public List<order> findAll(){
-        return orderRepository.findAll();
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     @Override
     @Transactional
     public  void deleteById(long id){
-        Order order = findById(id);
+        Order order = orderRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("order not found") );
         
         orderRepository.delete(order);
     }
+
+
+
+
 }

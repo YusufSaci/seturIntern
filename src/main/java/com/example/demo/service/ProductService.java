@@ -1,6 +1,12 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.Product;
+
+import java.util.List;
+
 public interface ProductService{
 
-    void save(Product product);
+    Product save(Product product);
 
     Product findById(long id);
 

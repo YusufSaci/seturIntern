@@ -1,4 +1,9 @@
+package com.example.demo.dao;
 
+
+import com.example.demo.entity.Customer;
+
+import java.util.List;
 
 public interface CustomerDao{
 
@@ -11,4 +16,5 @@ public interface CustomerDao{
     void deleteById(long id);
 
     Customer update(Customer customer);
+
 }

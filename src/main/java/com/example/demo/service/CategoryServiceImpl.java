@@ -1,4 +1,14 @@
+package com.example.demo.service;
 
+import com.example.demo.dao.CategoryRepository;
+import com.example.demo.entity.Category;
+import com.example.demo.entity.Product;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -24,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService{
             return category.get();
          }
 
-         throw new RunTimeException("category not found.")
+         throw new RuntimeException("category not found.");
     }
 
     @Override
@@ -39,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService{
 
         List<Product> products = category.getProducts();
 
-        for(Product tempProduct : producst){
+        for(Product tempProduct : products){
             tempProduct.setCategory(null);
         }
         

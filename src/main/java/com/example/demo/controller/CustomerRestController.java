@@ -1,4 +1,14 @@
+package com.example.demo.controller;
 
+import com.example.demo.dto.CustomerDto;
+import com.example.demo.entity.Customer;
+import com.example.demo.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -14,38 +24,34 @@ public class CustomerRestController{
 
 
     @GetMapping("/{id}")
-    public Customer getCustomer(@PathVariable long id){
-        Customer customer =customerService.findById(id);
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable Long id){
 
-        if(customer == null) {
-            throw new RunTimeException("customer not found");
-        }
-        return customer;
+        CustomerDto customer =customerService.findById(id);
+        return ResponseEntity.ok(customer);
+
+    }
+    @GetMapping
+    public ResponseEntity<List<CustomerDto>> getCustomers() {
+        List<CustomerDto> customers = customerService.findAll();
+        return ResponseEntity.ok(customers);
     }
 
     @PostMapping
-    public String addCustomer(@RequestBody Customer customer ){
-        
-        customerService.save(customer)
-        return "Customer added.";
+    public ResponseEntity<Void> addCustomer(@RequestBody CustomerDto customer) {
+        customerService.save(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping
-    public Customer updateCustomer(@RequestBody Customer customer){
-        return customerService.update(customer);
+    public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customer){
+        CustomerDto updatedCustomer = customerService.update(customer);
+        return ResponseEntity.ok(updatedCustomer);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCustomer(@PathVariable long id){
-
-        Customer customer = customerService.findById(id);
-
-        if(customer == null) {
-            throw new RunTimeException("customer not found");
-        }
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.deleteById(id);
-
-        return "Customer deleted.";
+        return ResponseEntity.noContent().build();
     }
 
 

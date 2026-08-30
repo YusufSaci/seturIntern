@@ -1,14 +1,19 @@
+package com.example.demo.service;
 
+import com.example.demo.dto.CustomerDto;
+import com.example.demo.entity.Customer;
+
+import java.util.List;
 
 public interface CustomerService{
 
-    void save(Customer customer);
+    void save(CustomerDto customer);
 
-    Customer findById(long id);
+    CustomerDto findById(long id);
 
-    List<Customer> findAll();
+    List<CustomerDto> findAll();
 
     void deleteById(long id);
 
-    Customer update(Customer customer);
+    CustomerDto update(CustomerDto customer);
 }

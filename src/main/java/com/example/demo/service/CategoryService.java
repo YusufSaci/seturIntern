@@ -1,6 +1,12 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.Category;
+
+import java.util.List;
+
 public interface CategoryService{
 
-    void save(Category category);
+    Category save(Category category);
 
     Category findById(long id);
 
