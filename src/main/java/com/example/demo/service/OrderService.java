@@ -15,4 +15,6 @@ public interface OrderService{
 
     void deleteById(long id);
 
+    OrderDto update(Long orderId,OrderDto orderDto);
+
 }

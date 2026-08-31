@@ -45,6 +45,25 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderMapper.toEntity(orderDto, customer, product);
         customer.addOrder(order);
+        order = orderRepository.save(order);
+
+        return orderMapper.toDto(order);
+    }
+
+
+    @Override
+    @Transactional
+    public OrderDto update(Long orderId,OrderDto orderDto) {
+        Customer customer = customerDao.findById(orderDto.customerId());
+        if (customer == null) {
+            throw new RuntimeException("customer not found");
+        }
+
+        Product product = productRepository.findById(orderDto.productId())
+                .orElseThrow(() -> new RuntimeException("product not found"));
+
+        Order order = orderMapper.toEntity(orderDto, customer, product);
+        order.setId(orderId);
 
         order = orderRepository.save(order);
 
