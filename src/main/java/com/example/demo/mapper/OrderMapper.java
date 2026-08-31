@@ -24,7 +24,7 @@ public class OrderMapper {
     public Order toEntity(OrderDto dto, Customer customer, Product product) {
 
         Order order = new Order(product, dto.amount());
-        customer.addOrder(order);
+        order.setId(dto.id());
         return order;
     }
 }

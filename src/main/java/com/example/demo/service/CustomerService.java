@@ -11,9 +11,12 @@ public interface CustomerService{
 
     CustomerDto findById(long id);
 
+    Customer findEntityById(long id);
+
     List<CustomerDto> findAll();
 
     void deleteById(long id);
 
     CustomerDto update(CustomerDto customer);
+    
 }

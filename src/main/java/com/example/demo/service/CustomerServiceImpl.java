@@ -41,6 +41,16 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public Customer findEntityById(long id){
+        Customer customer = customerDao.findById(id);
+        if (customer == null) {
+            throw new RuntimeException("customer not found");
+        }
+
+        return customer;
+    }
+
+    @Override
     public List<CustomerDto> findAll(){
         return customerDao.findAll().stream().map(customer -> customerMapper.toDto(customer)).toList();
     }

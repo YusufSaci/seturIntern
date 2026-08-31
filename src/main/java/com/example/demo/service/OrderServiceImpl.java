@@ -44,11 +44,13 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("product not found"));
 
         Order order = orderMapper.toEntity(orderDto, customer, product);
+        customer.addOrder(order);
 
         order = orderRepository.save(order);
 
         return orderMapper.toDto(order);
     }
+
     @Override
     public OrderDto findById(long id){
         Order order = orderRepository.findById(id)
@@ -66,12 +68,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional // buna bi bak list de güncelleniyor mu 
     public  void deleteById(long id){
         Order order = orderRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("order not found") );
         
         orderRepository.delete(order);
+
     }
 
 

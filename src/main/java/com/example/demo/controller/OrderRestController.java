@@ -13,10 +13,17 @@ import org.springframework.web.bind.annotation.*;
 public class OrderRestController {
 
     private OrderService orderService;
+    private CustomerService customerService
+    private OrderMapper orderMapper;
 
     @Autowired
-    public OrderRestController(OrderService orderService){
+    public OrderRestController(OrderService orderService, CustomerService customerService,
+         OrderMapper orderMapper){
         this.orderService = orderService;
+        this.customerService = customerService;
+        this.orderMapper = orderMapper;
+
+
     }
 
     @PostMapping("/customers/{customerId}/orders")
@@ -26,6 +33,32 @@ public class OrderRestController {
         OrderDto newOrder = orderService.save(customerId, orderDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newOrder);
 
+    }
+
+    @GetMapping("/customers/{customerId}/orders")
+    public ResponseEntity<List<OrderDto>> getCustomerOrderById(@PathVariable Long customerId){
+
+        Customer customer  = customerService.findEntityById()
+        List<OrderDto> orders = customer.getOrders().stream()
+                .map(order -> orderMapper.toDto(order))
+                .toList();
+
+        return ResponseEntity.ok(orders);
+
+    }
+
+    @GetMapping("/customers/orders")
+    public ResponseEntity<List<OrderDto>> getCustomerOrderById(){
+
+        List<OrderDto> orders = orderService.findAll();
+        return ResponseEntity.ok(orders);
+
+    }
+
+    @DeleteMapping("/customers/orders/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        orderService.deleteById();
+        return ResponseEntity.noContent().build();
     }
 
 
