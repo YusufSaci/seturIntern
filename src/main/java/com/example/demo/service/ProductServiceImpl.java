@@ -14,32 +14,42 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private  ProductRepository  productRepository;
+    private  ProductMapper procutMapper;
 
     @Autowired
-    public  ProductServiceImpl( ProductRepository productRepository){
+    public  ProductServiceImpl( ProductRepository productRepository, ProductMapper procutMapper){
         this.productRepository = productRepository;
+        this.productMapper = procutMapper
     }
 
     @Override
     @Transactional
-    public Product save(Product product){
-        return productRepository.save(product);
+    public ProductDto save(ProductDto productDto){
+        product = productMapper.toEntity(productDto);
+        return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
-    public Product findById(long id){
-         Optional<Product > product = productRepository.findById(id);
-
-         if(product.isPresent()){
-            return product.get();
-         }
-
-         throw new RuntimeException("product not found.");
+    @Transactional
+    public ProductDto update(Long id,ProductDto productDto){
+        product = productMapper.toEntity(productDto);
+        product.setId(id);
+        return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
-    public List<Product> findAll(){
-        return productRepository.findAll();
+    public ProductDto findById(long id){
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("product not found"));
+
+        return productMapper.toDto(product);
+    }
+
+    @Override
+    public List<ProductDto> findAll(){
+        List<ProductDto> products =  productRepository.findAll().stream()
+                        .map(product -> productMapper.toDto(product)).toList();
+        return  products;
     }
 
     @Override

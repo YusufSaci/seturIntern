@@ -14,32 +14,45 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService{
 
     private CategoryRepository categoryRepository;
+    private CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository){
+    public CategoryServiceImpl(CategoryRepository categoryRepository,CategoryMapper categoryMapper){
         this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
     @Transactional
-    public Category save(Category category){
-        return categoryRepository.save(category);
+    public CategoryDto save(CategoryDto categoryDto){
+
+        Category category = categoryMapper.toEntity(categoryDto);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
-    public Category findById(long id){
-         Optional<Category> category = categoryRepository.findById(id);
+    @Transactional
+    public CategoryDto update(CategoryDto categoryDto, Long id){
 
-         if(category.isPresent()){
-            return category.get();
-         }
-
-         throw new RuntimeException("category not found.");
+        Category category = categoryMapper.toEntity(categoryDto);
+        category.setId(id);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
-    public List<Category> findAll(){
-        return categoryRepository.findAll();
+    public CategoryDto findById(long id){
+        Category category =categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("category not found"));
+
+        
+        return categoryMapper.toDto(category);
+    }
+
+    @Override
+    public List<CategoryDto> findAll(){
+        List<CategoryDto> categories =  categoryRepository.findAll().stream()
+                        .map(category -> categoryMapper.toDto(category)).toList();
+        return categories;
     }
 
     @Override
