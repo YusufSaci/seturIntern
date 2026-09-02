@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.CategoryDto;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.entity.Customer;
+import com.example.demo.mapper.CategoryMapper;
 import com.example.demo.mapper.OrderMapper;
+import com.example.demo.service.CategoryService;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +35,13 @@ public class CategoryRestController {
     @PostMapping("/categories")
     public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto){
 
-        CategoryDto categoryDto = categoryService.save(categoryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDto);
+        CategoryDto category = categoryService.save(categoryDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
 
     }
 
     @PutMapping("/categories/{id}")
-    public ResponseEntity<OrderDto> updateCategory(@PathVariable Long id,
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id,
                                                        @RequestBody CategoryDto categoryDto){
 
         CategoryDto category = categoryService.update(categoryDto,id);
@@ -55,7 +58,7 @@ public class CategoryRestController {
 
     }
 
-    @GetMapping("cCategories")
+    @GetMapping("categories")
     public ResponseEntity<List<CategoryDto>>  getCategories(){
 
         List<CategoryDto> categories =  categoryService.findAll();
@@ -65,7 +68,7 @@ public class CategoryRestController {
 
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
-        categorService.deleteById(categoryId);
+        categoryService.deleteById(categoryId);
         return ResponseEntity.noContent().build();
     }
 

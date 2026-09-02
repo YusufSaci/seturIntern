@@ -1,7 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.CategoryRepository;
 import com.example.demo.dao.ProductRepository;
+import com.example.demo.dto.ProductDto;
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.mapper.ProductMapper;
 import com.example.demo.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +18,33 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private  ProductRepository  productRepository;
-    private  ProductMapper procutMapper;
+    private ProductMapper productMapper;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public  ProductServiceImpl( ProductRepository productRepository, ProductMapper procutMapper){
+    public  ProductServiceImpl( ProductRepository productRepository, ProductMapper procutMapper,
+                                CategoryRepository categoryRepository){
         this.productRepository = productRepository;
-        this.productMapper = procutMapper
+        this.productMapper = procutMapper;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     @Transactional
     public ProductDto save(ProductDto productDto){
-        product = productMapper.toEntity(productDto);
+        Category category = categoryRepository.findById(productDto.categoryId())
+                .orElseThrow(() -> new RuntimeException("category not found"));;
+
+        Product product = productMapper.toEntity(productDto,category);
         return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
     @Transactional
     public ProductDto update(Long id,ProductDto productDto){
-        product = productMapper.toEntity(productDto);
+        Category category = categoryRepository.findById(productDto.categoryId())
+                .orElseThrow(() -> new RuntimeException("category not found"));;
+        Product product = productMapper.toEntity(productDto,category);
         product.setId(id);
         return productMapper.toDto(productRepository.save(product));
     }
@@ -55,7 +67,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public  void deleteById(long id){
-        Product product = findById(id); 
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("product not found"));
         productRepository.delete(product);
     }
 }

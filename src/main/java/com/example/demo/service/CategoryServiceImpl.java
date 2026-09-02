@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.CategoryRepository;
+import com.example.demo.dto.CategoryDto;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.mapper.CategoryMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +60,8 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     @Transactional
     public  void deleteById(long id){
-        Category category = findById(id);
+        Category category =categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("category not found"));
 
         List<Product> products = category.getProducts();
 

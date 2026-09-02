@@ -8,4 +8,4 @@ public record CustomerDto(
         String lastName,
         Integer age,
         List<OrderDto> orders
-) { }
+) {}

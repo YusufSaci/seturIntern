@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.dto.OrderDto;
-import com.example.demo.entity.Customer;
-import com.example.demo.mapper.OrderMapper;
-import com.example.demo.service.CustomerService;
-import com.example.demo.service.OrderService;
+
+import com.example.demo.dto.ProductDto;
+import com.example.demo.mapper.ProductMapper;
+import com.example.demo.service.CategoryService;
+import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,30 +18,26 @@ import java.util.List;
 public class ProductRestController {
 
     private ProductService productService;
-    private ProductMapper productMapper;
 
     @Autowired
-    public ProductRestController( ProductService productService,  ProductMapper productMapper,
-         CategoryMapper categoryMapper){
+    public ProductRestController( ProductService productService){
         this.productService =  productService;
-        this.productMapper =  productMapper;
-
 
     }
 
     @PostMapping("/products")
     public ResponseEntity<ProductDto> addCategory(@RequestBody ProductDto productDto){
 
-        ProductDto productDto = productService.save(productDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
+        ProductDto product = productService.save(productDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
 
     }
 
     @PutMapping("/products/{id}")
     public ResponseEntity<ProductDto> updateCategory(@PathVariable Long id,
-                                                       @RequestBody CategoryDto productDto){
+                                                       @RequestBody ProductDto productDto){
 
-        ProductDto product = productService.update(productDto,id);
+        ProductDto product = productService.update(id ,productDto);
         return ResponseEntity.ok(product);
 
     }
@@ -56,10 +52,10 @@ public class ProductRestController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<CategoryDto>>  getCategories(){
+    public ResponseEntity<List<ProductDto>>  getCategories(){
 
-        List<CategoryDto> categories =  categoryService.findAll();
-        return ResponseEntity.ok(categories);
+        List<ProductDto> products =  productService.findAll();
+        return ResponseEntity.ok(products);
 
     }
 

@@ -1,3 +1,11 @@
+package com.example.demo.mapper;
+
+import com.example.demo.dto.CategoryDto;
+import com.example.demo.dto.ProductDto;
+import com.example.demo.entity.Category;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class CategoryMapper{
@@ -11,13 +19,12 @@ public class CategoryMapper{
 
     public CategoryDto toDto(Category category){
 
-        List<ProductDto> productsDto = category.getProducts.stream()
+        List<ProductDto> productsDto = category.getProducts().stream()
                         .map(product -> productMapper.toDto(product)).toList();
 
         return new CategoryDto(
-            category.getId(),,
+            category.getId(),
             category.getCategoryName(),
-            product.getCategory.getCategoryName(),
             productsDto
 
         );
