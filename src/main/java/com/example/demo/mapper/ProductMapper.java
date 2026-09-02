@@ -10,12 +10,19 @@ public class ProductMapper{
 
 
     public ProductDto toDto(Product product){
+
+        Long categoryId = null;
+        String categoryName = null;
+        if(product.getCategory() != null){
+            categoryId =  product.getCategory().getId();
+            categoryName = product.getCategory().getCategoryName();
+        }
         return new ProductDto(
             product.getId(),
             product.getProductName(),
-            product.getPrice(),
-            product.getCategory().getId(),
-            product.getCategory().getCategoryName()
+            product.getPrice(), 
+            categoryId,
+            categoryName
 
         );
     }

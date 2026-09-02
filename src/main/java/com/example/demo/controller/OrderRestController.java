@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.CustomerDto;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.entity.Customer;
 import com.example.demo.mapper.OrderMapper;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -20,13 +23,17 @@ public class OrderRestController {
     private OrderService orderService;
     private CustomerService customerService;
     private OrderMapper orderMapper;
+    private JsonMapper jsonMapper;
+
 
     @Autowired
     public OrderRestController(OrderService orderService, CustomerService customerService,
-         OrderMapper orderMapper){
+         OrderMapper orderMapper,JsonMapper jsonMapper){
         this.orderService = orderService;
         this.customerService = customerService;
         this.orderMapper = orderMapper;
+        this.jsonMapper = jsonMapper;
+
 
 
     }
@@ -46,6 +53,18 @@ public class OrderRestController {
 
         OrderDto newOrder = orderService.update(id, orderDto);
         return ResponseEntity.ok(newOrder);
+
+    }
+
+    @PatchMapping("/customers/orders/{id}")
+    public ResponseEntity<OrderDto> updateOrderWithPatch(@PathVariable Long id,
+                                                               @RequestBody Map<String,Object> patch){
+
+        OrderDto oldOrder = orderService.findById(id);
+        OrderDto updatedOrder= jsonMapper.updateValue(oldOrder,patch);
+        OrderDto category = orderService.update(id,updatedOrder);
+
+        return ResponseEntity.ok(category);
 
     }
 

@@ -63,8 +63,9 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     @Transactional
-    public CustomerDto update(CustomerDto customerDto){
+    public CustomerDto update(CustomerDto customerDto, Long id){
         Customer customer = customerMapper.toEntity(customerDto);
+        customer.setId(id);
         return customerMapper.toDto(customerDao.update(customer));
     }
 }

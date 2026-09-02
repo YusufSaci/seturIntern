@@ -17,9 +17,13 @@ public class CustomerMapper {
     }
 
     public CustomerDto toDto(Customer customer) {
-        List<OrderDto> orders = customer.getOrders().stream()
-                .map(orderMapper::toDto)
-                .toList();
+        List<OrderDto> orders = null;
+
+        if(customer.getOrders() != null) {
+            orders = customer.getOrders().stream()
+                    .map(orderMapper::toDto)
+                    .toList();
+        }
 
         return new CustomerDto(customer.getId(), customer.getFirstName(),
                 customer.getLastName(), customer.getAge(), orders);
@@ -27,7 +31,6 @@ public class CustomerMapper {
 
     public Customer toEntity(CustomerDto dto) {
         Customer customer = new Customer(dto.firstName(), dto.lastName(), dto.age());
-        customer.setId(dto.id());
         return customer;
     }
 }

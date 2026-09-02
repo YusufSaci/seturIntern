@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -22,13 +24,32 @@ public class CategoryRestController {
 
     private CategoryService categoryService;
     private CategoryMapper categoryMapper;
+    private JsonMapper jsonMapper;
 
     @Autowired
     public CategoryRestController( CategoryService categoryService, CustomerService customerService,
-         CategoryMapper categoryMapper){
+         CategoryMapper categoryMapper, JsonMapper jsonMapper){
         this.categoryService = categoryService;
         this.categoryMapper = categoryMapper;
+        this.jsonMapper = jsonMapper;
 
+
+    }
+
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long categoryId){
+
+        CategoryDto category = categoryService.findById(categoryId);
+
+        return ResponseEntity.ok(category);
+
+    }
+
+    @GetMapping("categories")
+    public ResponseEntity<List<CategoryDto>>  getCategories(){
+
+        List<CategoryDto> categories =  categoryService.findAll();
+        return ResponseEntity.ok(categories);
 
     }
 
@@ -49,22 +70,18 @@ public class CategoryRestController {
 
     }
 
-    @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long categoryId){
+    @PatchMapping("/categories/{id}")
+    public ResponseEntity<CategoryDto> updateCategoryWithPatch(@PathVariable Long id,
+                                                      @RequestBody Map<String,Object> patch){
 
-        CategoryDto category = categoryService.findById(categoryId);
+        CategoryDto oldCategory = categoryService.findById(id);
+        CategoryDto updatedCategory = jsonMapper.updateValue(oldCategory,patch);
+        CategoryDto category = categoryService.update(updatedCategory,id);
 
         return ResponseEntity.ok(category);
 
     }
 
-    @GetMapping("categories")
-    public ResponseEntity<List<CategoryDto>>  getCategories(){
-
-        List<CategoryDto> categories =  categoryService.findAll();
-        return ResponseEntity.ok(categories);
-
-    }
 
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {

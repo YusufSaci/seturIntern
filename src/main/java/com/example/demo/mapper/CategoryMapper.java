@@ -18,9 +18,12 @@ public class CategoryMapper{
 
 
     public CategoryDto toDto(Category category){
+        List<ProductDto> productsDto = null;
 
-        List<ProductDto> productsDto = category.getProducts().stream()
-                        .map(product -> productMapper.toDto(product)).toList();
+        if(category.getProducts() != null) {
+            productsDto = category.getProducts().stream()
+                    .map(product -> productMapper.toDto(product)).toList();
+        }
 
         return new CategoryDto(
             category.getId(),
@@ -32,7 +35,7 @@ public class CategoryMapper{
 
     public Category toEntity(CategoryDto categoryDto){
 
-        Category category = new Category( categoryDto.categoryName());
+        Category category = new Category(categoryDto.categoryName());
         return  category;
        
 
