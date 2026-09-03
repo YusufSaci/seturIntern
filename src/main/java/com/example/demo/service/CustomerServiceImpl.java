@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dto.CustomerDto;
 import com.example.demo.entity.Customer;
+import com.example.demo.exception.CustomerNotFoundException;
 import com.example.demo.mapper.CustomerMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService{
     public CustomerDto findById(long id){
         Customer customer = customerDao.findById(id);
         if (customer == null) {
-            throw new RuntimeException("customer not found");
+            throw new CustomerNotFoundException("customer not found");
         }
 
         return customerMapper.toDto(customer);
@@ -44,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer findEntityById(long id){
         Customer customer = customerDao.findById(id);
         if (customer == null) {
-            throw new RuntimeException("customer not found");
+            throw new CustomerNotFoundException("customer not found");
         }
 
         return customer;

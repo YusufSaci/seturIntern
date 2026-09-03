@@ -4,8 +4,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.OrderDto;
 import com.example.demo.dto.ProductDto;
-import com.example.demo.mapper.ProductMapper;
-import com.example.demo.service.CategoryService;
+
 import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

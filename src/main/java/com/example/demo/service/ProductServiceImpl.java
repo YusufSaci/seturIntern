@@ -5,6 +5,8 @@ import com.example.demo.dao.ProductRepository;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.exception.CategoryNotFoundException;
+import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -33,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDto save(ProductDto productDto){
         Category category = categoryRepository.findById(productDto.categoryId())
-                .orElseThrow(() -> new RuntimeException("category not found"));;
+                .orElseThrow(() -> new CategoryNotFoundException("category not found"));;
 
         Product product = productMapper.toEntity(productDto,category);
         return productMapper.toDto(productRepository.save(product));
@@ -43,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDto update(Long id,ProductDto productDto){
         Category category = categoryRepository.findById(productDto.categoryId())
-                .orElseThrow(() -> new RuntimeException("category not found"));;
+                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
         Product product = productMapper.toEntity(productDto,category);
         product.setId(id);
         return productMapper.toDto(productRepository.save(product));
@@ -52,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findById(long id){
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("product not found"));
+            .orElseThrow(() -> new ProductNotFoundException("product not found"));
 
         return productMapper.toDto(product);
     }
@@ -68,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public  void deleteById(long id){
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("product not found"));
         productRepository.delete(product);
     }
 }

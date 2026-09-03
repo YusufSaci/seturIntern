@@ -58,13 +58,13 @@ public class OrderRestController {
 
     @PatchMapping("/customers/orders/{id}")
     public ResponseEntity<OrderDto> updateOrderWithPatch(@PathVariable Long id,
-                                                               @RequestBody Map<String,Object> patch){
+                                    @RequestBody Map<String,Object> patch){
 
         OrderDto oldOrder = orderService.findById(id);
         OrderDto updatedOrder= jsonMapper.updateValue(oldOrder,patch);
-        OrderDto category = orderService.update(id,updatedOrder);
+        OrderDto order = orderService.update(id,updatedOrder);
 
-        return ResponseEntity.ok(category);
+        return ResponseEntity.ok(order);
 
     }
 

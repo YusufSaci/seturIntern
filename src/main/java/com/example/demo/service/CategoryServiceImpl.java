@@ -4,6 +4,7 @@ import com.example.demo.dao.CategoryRepository;
 import com.example.demo.dto.CategoryDto;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.exception.CategoryNotFoundException;
 import com.example.demo.mapper.CategoryMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public CategoryDto findById(long id){
         Category category =categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
 
         
         return categoryMapper.toDto(category);
@@ -61,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public  void deleteById(long id){
         Category category =categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
 
         List<Product> products = category.getProducts();
 

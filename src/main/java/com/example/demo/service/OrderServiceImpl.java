@@ -7,6 +7,9 @@ import com.example.demo.dto.OrderDto;
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.Product;
+import com.example.demo.exception.CustomerNotFoundException;
+import com.example.demo.exception.OrderNotFoundException;
+import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.mapper.OrderMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +40,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto save(Long customerId,OrderDto orderDto) {
         Customer customer = customerDao.findById(customerId);
         if (customer == null) {
-            throw new RuntimeException("customer not found");
+            throw new CustomerNotFoundException("customer not found");
         }
 
         Product product = productRepository.findById(orderDto.productId())
-                .orElseThrow(() -> new RuntimeException("product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("product not found"));
 
         Order order = orderMapper.toEntity(orderDto, customer, product);
         customer.addOrder(order);
@@ -56,11 +59,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto update(Long orderId,OrderDto orderDto) {
         Customer customer = customerDao.findById(orderDto.customerId());
         if (customer == null) {
-            throw new RuntimeException("customer not found");
+            throw new CustomerNotFoundException("customer not found");
         }
 
         Product product = productRepository.findById(orderDto.productId())
-                .orElseThrow(() -> new RuntimeException("product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("product not found"));
 
         Order order = orderMapper.toEntity(orderDto, customer, product);
         order.setId(orderId);
@@ -73,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto findById(long id){
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("order not found") );
+                .orElseThrow(() -> new OrderNotFoundException("order not found") );
 
         return orderMapper.toDto(order);
     }
@@ -90,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional // buna bi bak list de güncelleniyor mu 
     public  void deleteById(long id){
         Order order = orderRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("order not found") );
+                orElseThrow(() -> new OrderNotFoundException("order not found") );
         
         orderRepository.delete(order);
 
