@@ -59,13 +59,21 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     @Transactional
     public  void deleteById(long id){
-        customerDao.deleteById(id);
+        Customer customer = customerDao.deleteById(id);
+        if (customer == null) {
+            throw new CustomerNotFoundException("customer not found");
+        }
+
     }
 
     @Override
     @Transactional
     public CustomerDto update(CustomerDto customerDto, Long id){
-        Customer customer = customerMapper.toEntity(customerDto);
+        Customer customer = customerDao.findById(id);
+        if (customer == null) {
+            throw new CustomerNotFoundException("customer not found");
+        }
+        customer = customerMapper.toEntity(customerDto);
         customer.setId(id);
         return customerMapper.toDto(customerDao.update(customer));
     }

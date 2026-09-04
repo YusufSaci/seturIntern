@@ -13,7 +13,7 @@ public interface CustomerDao{
 
     List<Customer> findAll();
 
-    void deleteById(long id);
+    Customer deleteById(long id);
 
     Customer update(Customer customer);
 

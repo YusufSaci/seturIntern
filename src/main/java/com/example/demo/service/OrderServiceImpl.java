@@ -57,6 +57,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto update(Long orderId,OrderDto orderDto) {
+
+        Order oldOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("order not found") );
+
         Customer customer = customerDao.findById(orderDto.customerId());
         if (customer == null) {
             throw new CustomerNotFoundException("customer not found");

@@ -38,9 +38,7 @@ public class CategoryRestController {
 
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long categoryId){
-
         CategoryDto category = categoryService.findById(categoryId);
-
         return ResponseEntity.ok(category);
 
     }
@@ -81,7 +79,6 @@ public class CategoryRestController {
         return ResponseEntity.ok(category);
 
     }
-
 
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {

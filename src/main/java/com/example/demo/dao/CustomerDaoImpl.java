@@ -42,12 +42,14 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public void deleteById(long id){
+    public Customer deleteById(long id){
         Customer customer = entityManager.find(Customer.class, id);
 
         if(customer != null){
             entityManager.remove(customer);
         }
+
+        return customer;
     }
 
     @Override

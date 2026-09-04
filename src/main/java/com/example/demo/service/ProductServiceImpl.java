@@ -38,21 +38,30 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new CategoryNotFoundException("category not found"));;
 
         Product product = productMapper.toEntity(productDto,category);
+
         return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
     @Transactional
     public ProductDto update(Long id,ProductDto productDto){
+
+        Product oldProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("product not found"));
+
         Category category = categoryRepository.findById(productDto.categoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("category not found"));
+
         Product product = productMapper.toEntity(productDto,category);
+
         product.setId(id);
+
         return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
     public ProductDto findById(long id){
+
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException("product not found"));
 
@@ -61,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findAll(){
+
         List<ProductDto> products =  productRepository.findAll().stream()
                         .map(product -> productMapper.toDto(product)).toList();
         return  products;
@@ -69,8 +79,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public  void deleteById(long id){
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("product not found"));
+
         productRepository.delete(product);
     }
 }

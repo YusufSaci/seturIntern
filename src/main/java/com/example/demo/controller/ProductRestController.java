@@ -54,9 +54,9 @@ public class ProductRestController {
 
         ProductDto oldProduct= productService.findById(id);
         ProductDto updatedProduct= jsonMapper.updateValue(oldProduct,patch);
-        ProductDto category = productService.update(id,updatedProduct);
+        ProductDto product = productService.update(id,updatedProduct);
 
-        return ResponseEntity.ok(category);
+        return ResponseEntity.ok(product);
 
     }
 
