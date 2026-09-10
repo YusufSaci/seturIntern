@@ -1,10 +1,12 @@
 package com.example.demo.aspect;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
 public class TimeAspect {
@@ -21,8 +23,7 @@ public class TimeAspect {
 
         long duration = end - begin;
 
-        System.out.println("Method %s took %d ms."
-                .formatted(methodName, duration));
+        log.info("Method {} took {} ms.", methodName, duration);
 
         return result;
     }

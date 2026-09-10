@@ -94,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional // buna bi bak list de güncelleniyor mu 
+    @Transactional
     public  void deleteById(long id){
         Order order = orderRepository.findById(id).
                 orElseThrow(() -> new OrderNotFoundException("order not found") );

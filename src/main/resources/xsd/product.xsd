@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://example.com/product"
+           xmlns:tns="http://example.com/product"
+           elementFormDefault="qualified">
+
+    <xs:element name="GetProductRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="price" type="xs:int"/>
+                <xs:element name="category" type="tns:Category"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CreateProductRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="productName" type="xs:string"/>
+                <xs:element name="price" type="xs:int"/>
+                <xs:element name="categoryId" type="xs:long"/>
+                <xs:element name="categoryName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CreateProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="productName" type="xs:string"/>
+                <xs:element name="price" type="xs:int"/>
+                <xs:element name="category" type="tns:Category"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+     <xs:complexType name = "Category">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+     </xs:complexType>
+
+</xs:schema>

@@ -28,7 +28,6 @@ public class ProductRestController {
         this.productService =  productService;
         this.jsonMapper = jsonMapper;
 
-
     }
 
     @PostMapping("/products")

@@ -26,9 +26,6 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "product",cascade = CascadeType.ALL)
     private List<Order> orders;
 
-
-
-
     // constructor
     public Product() {}
 

@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public  void deleteById(long id){
+    public void deleteById(long id){
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("product not found"));

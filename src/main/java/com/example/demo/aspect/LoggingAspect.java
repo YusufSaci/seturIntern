@@ -1,12 +1,14 @@
 package com.example.demo.aspect;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
 public class LoggingAspect {
@@ -21,7 +23,7 @@ public class LoggingAspect {
 
         Long id = (Long) args[0];
 
-        System.out.println(serviceName + ": entity with id " + id + " deleted.");
+        log.info("{}: entity with id {} deleted.", serviceName, id);
     }
 
     @AfterThrowing(
@@ -37,8 +39,7 @@ public class LoggingAspect {
 
         Long id = (Long) args[0];
 
-        System.out.println(serviceName + ": entity with id " + id +
-                " could not be deleted. Error: " + ex.getMessage());
+        log.error("{}: entity with id {} could not be deleted.", serviceName, id, ex);
     }
 
 }
