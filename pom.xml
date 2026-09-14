@@ -27,6 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -38,6 +39,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${org.mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -122,12 +137,8 @@
 					<generatePackage>
 						com.example.demo.soap.generated
 					</generatePackage>
-
 				</configuration>
-
 			</plugin>
-
-
 		</plugins>
 	</build>
 

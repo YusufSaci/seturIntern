@@ -1,9 +1,8 @@
 package com.example.demo.dao;
 
-import com.example.demo.dto.CustomerDto;
-import com.example.demo.dto.OrderDto;
+
 import com.example.demo.entity.Customer;
-import com.example.demo.service.OrderService;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
