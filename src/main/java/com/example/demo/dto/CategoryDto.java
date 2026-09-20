@@ -4,6 +4,5 @@ import java.util.List;
 
 public record CategoryDto(
         Long id,
-        String categoryName,
-        List<ProductDto> products
-) {}
+        String categoryName
+){}

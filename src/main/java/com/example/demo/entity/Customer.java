@@ -1,17 +1,22 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "customer")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "first_name")
@@ -20,74 +25,25 @@ public class Customer {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "age")
     private int age;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer",cascade = CascadeType.ALL)
-    private List<Order> orders;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
-    // constructor
-    public Customer() {}
+    public Customer(String firstName, String lastName, int age) {
 
-    public Customer(String firstName, String lastName, int age){
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-
     }
 
-
-    // getter ve setter
-     
-    public Long getId(){
-        return id;
-    }
-
-    public void setId(Long id){
-        this.id = id;
-    }
-
-    public String getFirstName(){
-        return firstName;
-    }
-
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public String getLastName(){
-        return lastName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
-
-    public int getAge(){
-        return age;
-    }
-
-    public void setAge(int age){
-        this.age=age;
-    }
-
-    public List<Order> getOrders(){
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders){
-        this.orders=orders;
-    }
-
-    public void addOrder(Order order){
-        if(orders == null){
-            orders = new ArrayList<>();
-        }
+    public void addOrder(Order order) {
         orders.add(order);
         order.setCustomer(this);
-
     }
 
-
-
+    public void removeOrder(Order order) {
+        orders.remove(order);
+        order.setCustomer(null);
+    }
 }

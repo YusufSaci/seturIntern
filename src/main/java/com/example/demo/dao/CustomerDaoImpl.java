@@ -5,56 +5,47 @@ import com.example.demo.entity.Customer;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class CustomerDaoImpl implements CustomerDao{
+@RequiredArgsConstructor
+public class CustomerDaoImpl implements CustomerDao {
 
+    private final EntityManager entityManager;
 
-    private EntityManager entityManager;
-
-    @Autowired
-    public CustomerDaoImpl (EntityManager entityManager){
-        this.entityManager = entityManager;
-    }
-
-    
     @Override
-    public void save(Customer customer){
-       entityManager.persist(customer);
+    public void save(Customer customer) {
+        entityManager.persist(customer);
     }
 
     @Override
-    public Customer findById(long id){
+    public Customer findById(long id) {
         return entityManager.find(Customer.class, id);
     }
 
-
     @Override
-    public List<Customer> findAll(){
-        TypedQuery<Customer> query = entityManager.createQuery("FROM Customer ", Customer.class);
-        
-        return query.getResultList();
+    public List<Customer> findAll() {
+        return entityManager.createQuery("SELECT c FROM Customer c", Customer.class)
+                .getResultList();
     }
 
     @Override
-    public Customer deleteById(long id){
-        Customer customer = entityManager.find(Customer.class, id);
+    public void deleteById(long id) {
 
-        if(customer != null){
+        Customer customer =
+                entityManager.find(Customer.class, id);
+
+        if (customer != null) {
             entityManager.remove(customer);
         }
-
-        return customer;
     }
 
     @Override
-    public Customer update(Customer customer){
+    public Customer update(Customer customer) {
         return entityManager.merge(customer);
     }
-
-
 }

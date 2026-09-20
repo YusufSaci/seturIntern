@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CategoryDto;
+import com.example.demo.dto.CustomerDetailDto;
 import com.example.demo.dto.CustomerDto;
 import com.example.demo.entity.Customer;
 import com.example.demo.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
-
+@RequiredArgsConstructor
 public class CustomerRestController{
 
-    private CustomerService customerService;
-    private JsonMapper jsonMapper;
-
-
-    @Autowired
-    public CustomerRestController(CustomerService customerService,JsonMapper jsonMapper) {
-        this.customerService = customerService;
-        this.jsonMapper = jsonMapper;
-    }   
-
+    private final CustomerService customerService;
+    private final JsonMapper jsonMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> getCustomer(@PathVariable Long id){
+    public ResponseEntity<CustomerDetailDto> getCustomer(@PathVariable Long id){
 
-        CustomerDto customer =customerService.findById(id);
+        CustomerDetailDto customer =customerService.findDetailById(id);
         return ResponseEntity.ok(customer);
 
     }
@@ -48,7 +42,7 @@ public class CustomerRestController{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id, @RequestBody CustomerDto customer){
         CustomerDto updatedCustomer = customerService.update(customer,id);
         return ResponseEntity.ok(updatedCustomer);

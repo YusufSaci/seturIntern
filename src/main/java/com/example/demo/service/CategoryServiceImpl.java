@@ -1,79 +1,83 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.CategoryRepository;
+import com.example.demo.dto.CategoryDetailDto;
 import com.example.demo.dto.CategoryDto;
 import com.example.demo.entity.Category;
-import com.example.demo.entity.Product;
 import com.example.demo.exception.CategoryNotFoundException;
 import com.example.demo.mapper.CategoryMapper;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+@RequiredArgsConstructor
+public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
-    private CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository,CategoryMapper categoryMapper){
-        this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-    }
-
-    @Override
     @Transactional
-    public CategoryDto save(CategoryDto categoryDto){
+    @Override
+    public CategoryDto save(CategoryDto dto) {
 
-        Category category = categoryMapper.toEntity(categoryDto);
-        return categoryMapper.toDto(categoryRepository.save(category));
+        Category category = categoryMapper.toEntity(dto);
+
+        Category saved = categoryRepository.save(category);
+
+        return categoryMapper.toDto(saved);
     }
 
-    @Override
     @Transactional
-    public CategoryDto update(CategoryDto categoryDto, Long id){
-
-        Category oldCategory =categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
-
-        Category category = categoryMapper.toEntity(categoryDto);
-        category.setId(id);
-
-        return categoryMapper.toDto(categoryRepository.save(category));
-    }
-
     @Override
-    public CategoryDto findById(long id){
-        Category category =categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
+    public CategoryDto update(CategoryDto dto, Long id) {
 
-        
+        Category category = categoryRepository.findById(id)
+                        .orElseThrow(() -> new CategoryNotFoundException("category not found"));
+
+        category.setCategoryName(dto.categoryName());
+
         return categoryMapper.toDto(category);
     }
 
     @Override
-    public List<CategoryDto> findAll(){
-        List<CategoryDto> categories =  categoryRepository.findAll().stream()
-                        .map(category -> categoryMapper.toDto(category)).toList();
-        return categories;
+    public CategoryDetailDto findDetailById(Long id) {
+
+        Category category = categoryRepository.findById(id)
+                        .orElseThrow(() -> new CategoryNotFoundException("category not found"));
+
+        return categoryMapper.toDetailDto(category);
+    }
+
+    @Override
+    public CategoryDto findById(Long id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("category not found"));
+
+        return categoryMapper.toDto(category);
+    }
+
+    @Override
+    public List<CategoryDto> findAll() {
+
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::toDto)
+                .toList();
     }
 
     @Override
     @Transactional
-    public  void deleteById(long id){
-        Category category =categoryRepository.findById(id)
+    public void deleteById(Long id) {
+
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("category not found"));
 
-        List<Product> products = category.getProducts();
+        category.getProducts().forEach(product -> product.setCategory(null));
 
-        for(Product tempProduct : products){
-            tempProduct.setCategory(null);
-        }
-        
         categoryRepository.delete(category);
     }
 }

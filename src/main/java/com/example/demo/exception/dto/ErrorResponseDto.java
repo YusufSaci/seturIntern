@@ -4,5 +4,4 @@ public record ErrorResponseDto(
         int status,
         String message,
         Long timeStamp
-
-){ }
+){}

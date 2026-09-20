@@ -1,74 +1,41 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "category_name")
     private String categoryName;
 
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "category",
-        cascade = {
-        CascadeType.PERSIST,
-        CascadeType.MERGE
-        }
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
-    // constructor
-    public Category() {}
-
-    public Category(String categoryName){
-        this.categoryName = categoryName;
-       
-    }
-
-    // getter ve setter
-     
-    public Long getId(){
-        return id;
-    }
-
-    public void setId(Long id){
-        this.id = id;
-    }
-
-    public String getCategoryName(){
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName){
+    public Category(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public List<Product> getProducts(){
-        return products;
-    }
-
-    public void setProducts(List<Product> products){
-        this.products = products;
-    }
-
-    public void addProduct(Product product){
-    
-        if(products == null){
-            products = new ArrayList<>();
-        }
+    public void addProduct(Product product) {
         products.add(product);
         product.setCategory(this);
     }
-
-   
-
 }

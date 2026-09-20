@@ -1,36 +1,17 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.CustomerDetailDto;
 import com.example.demo.dto.CustomerDto;
-import com.example.demo.dto.OrderDto;
 import com.example.demo.entity.Customer;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-import java.util.List;
 
-@Component
-public class CustomerMapper {
+@Mapper(componentModel = "spring", uses = OrderMapper.class)
+public interface CustomerMapper {
 
-    private final OrderMapper orderMapper;
+    CustomerDto toDto(Customer customer);
 
-    public CustomerMapper(OrderMapper orderMapper) {
-        this.orderMapper = orderMapper;
-    }
+    CustomerDetailDto toDetailDto(Customer customer);
 
-    public CustomerDto toDto(Customer customer) {
-        List<OrderDto> orders = null;
-
-        if(customer.getOrders() != null) {
-            orders = customer.getOrders().stream()
-                    .map(orderMapper::toDto)
-                    .toList();
-        }
-
-        return new CustomerDto(customer.getId(), customer.getFirstName(),
-                customer.getLastName(), customer.getAge(), orders);
-    }
-
-    public Customer toEntity(CustomerDto dto) {
-        Customer customer = new Customer(dto.firstName(), dto.lastName(), dto.age());
-        return customer;
-    }
+    Customer toEntity(CustomerDto dto);
 }

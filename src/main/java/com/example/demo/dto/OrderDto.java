@@ -5,11 +5,7 @@ public record OrderDto(
         Integer amount,
         Long customerId,
         String customerName,
-        String productName,
         Long productId,
+        String productName,
         Integer productPrice
-) {
-    public OrderDto(int amount, Long productId) {
-        this(null, amount, null, null, null, productId, null);
-    }
-}
+) {}

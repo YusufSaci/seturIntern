@@ -1,73 +1,36 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import com.example.demo.entity.Product;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "orders")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private int amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    // constructor
-    public Order() {}
 
-    public Order( Product product, int amount){
+    public Order(Product product, Customer customer, int amount) {
         this.product = product;
-        this.amount = amount;
-
-    }
-
-    // getter ve setter
-     
-    public Long getId(){
-        return id;
-    }
-
-    public void setId(Long id){
-        this.id = id;
-    }
-
-
-    public Product getProduct(){
-        return product;
-    }
-
-    public void setProduct(Product product){
-        this.product = product;
-    }
-
-    public int getAmount(){
-        return amount;
-    }
-
-    public void setAmount(int amount){
-        this.amount=amount;
-    }
-
-    public Customer getCustomer(){
-        return customer;
-    }
-
-    public void setCustomer(Customer customer){
         this.customer = customer;
+        this.amount = amount;
     }
-
-
-
 }

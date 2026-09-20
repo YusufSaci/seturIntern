@@ -1,18 +1,20 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.CategoryDetailDto;
 import com.example.demo.dto.CategoryDto;
 import com.example.demo.entity.Category;
 import org.mapstruct.Mapper;
 
 
 @Mapper(componentModel = "spring", uses = ProductMapper.class)
-public interface CategoryMapper{
+public interface CategoryMapper {
 
     CategoryDto toDto(Category category);
-    Category toEntity(CategoryDto categoryDto);
 
+    CategoryDetailDto toDetailDto(Category category);
+
+    Category toEntity(CategoryDto dto);
 }
-
 
 
 
